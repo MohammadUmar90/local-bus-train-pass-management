@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:public_transit_pass_info/config/palette.dart';
 import 'package:public_transit_pass_info/screens/referralCode.dart';
@@ -37,11 +38,15 @@ class _HomeScreen extends State<HomeScreen> {
   bool isBusPassAvailable = false;
   List<Map<String, dynamic>> userPassDetails = [];
   bool _isAadhaarNumPresent = false;
+  bool showScanner = false;
 
   @override
   initState() {
     super.initState();
     _initializeScreen();
+    notificationServices.initLocalNotification();
+    notificationServices.requestNotificationPermission();
+    notificationServices.firebaseInit();
     getQRData();
     Future.delayed(Duration.zero, () {
       userId = widget.userId.toString();
@@ -56,7 +61,7 @@ class _HomeScreen extends State<HomeScreen> {
         print("as Admin: ${widget.asTC}");
         print("****************************************");
       }
-      notificationServices.requestNotificationPermission();
+      // notificationServices.requestNotificationPermission();
     });
   }
 
@@ -150,7 +155,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 if (kDebugMode) {
                                   print('Menu');
                                 }
-                                showMenu(context, isTrain);
+                                showMenu(context);
                               },
                               child: const Icon(
                                 Icons.menu,
@@ -456,7 +461,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                             FontWeight.normal),
                                                     children: [
                                                   TextSpan(
-                                                      text: userPassDetails[0]['passengerName'],
+                                                      text: userPassDetails[0]
+                                                          ['passengerName'],
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -475,7 +481,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                             FontWeight.normal),
                                                     children: [
                                                   TextSpan(
-                                                      text: userPassDetails[0]['from'],
+                                                      text: userPassDetails[0]
+                                                          ['from'],
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -494,7 +501,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                             FontWeight.normal),
                                                     children: [
                                                   TextSpan(
-                                                      text: userPassDetails[0]['to'],
+                                                      text: userPassDetails[0]
+                                                          ['to'],
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -513,7 +521,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                             FontWeight.normal),
                                                     children: [
                                                   TextSpan(
-                                                      text: userPassDetails[0]['class'],
+                                                      text: userPassDetails[0]
+                                                          ['class'],
                                                       style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -537,7 +546,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                 fontWeight: FontWeight.normal),
                                             children: [
                                           TextSpan(
-                                              text: userPassDetails[0]['activationDate'],
+                                              text: userPassDetails[0]
+                                                  ['activationDate'],
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           const TextSpan(
@@ -546,7 +556,8 @@ class _HomeScreen extends State<HomeScreen> {
                                                   fontWeight:
                                                       FontWeight.normal)),
                                           TextSpan(
-                                              text: userPassDetails[0]['ExppiryDate'],
+                                              text: userPassDetails[0]
+                                                  ['ExppiryDate'],
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                         ])),
@@ -695,29 +706,64 @@ class _HomeScreen extends State<HomeScreen> {
                     ],
                   ),
                   child: widget.asTC
-                      ? Center(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.withOpacity(0.8),
-                                      blurRadius: 10,
-                                      blurStyle: BlurStyle.outer)
-                                ],
+                      ? showScanner
+                          ? Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const SizedBox.shrink(),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showScanner = false;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Stack(
+                                  children: [
+                                    MobileScanner(
+                                      onDetect: (barcodes) {},
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showScanner = true;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.6),
+                                          blurRadius: 8,
+                                          blurStyle: BlurStyle.outer)
+                                    ],
+                                  ),
+                                  child: const Text(
+                                    "Verify Passenger",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
                               ),
-                              child: const Text(
-                                "Verify Passenger",
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ),
-                        )
+                            )
                       : Center(
                           child: !isTrainPassAvailable
                               ? Container(
@@ -732,7 +778,7 @@ class _HomeScreen extends State<HomeScreen> {
                                     ],
                                   ),
                                   child: QrImageView(
-                                    data: qrData,
+                                    data: userPassDetails[0]['passNumber'],
                                     version: QrVersions.auto,
                                     size: 200.0,
                                   ),
@@ -753,7 +799,7 @@ class _HomeScreen extends State<HomeScreen> {
     );
   }
 
-  showMenu(BuildContext context, var isTrain) {
+  showMenu(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -818,7 +864,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 width: 50,
                               ),
                               const Text(
-                                "My Profile",
+                                "Edit Profile",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w700),
                               ),
@@ -830,9 +876,12 @@ class _HomeScreen extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: GestureDetector(
-                        onTap: () => setState(() {
-                          isTrain = !isTrain;
-                        }),
+                        onTap: () {
+                          Navigator.pop(context);
+                          setState(() {
+                            isTrain = !isTrain;
+                          });
+                        },
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 5),
                           decoration: BoxDecoration(
@@ -952,11 +1001,13 @@ class _HomeScreen extends State<HomeScreen> {
   switchMode() {
     setState(() {
       isTrain = !isTrain;
+      _initializeScreen();
     });
   }
 
   Future<String> getQRData() async {
-    qrData = await dbServices.fetchUserPassNumber("958618358111");
+    qrData = await dbServices
+        .fetchUserPassNumber(userPassDetails[0]['aadharNumber']);
     if (kDebugMode) {
       print(
           "*********************************>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<");
@@ -980,7 +1031,8 @@ class _HomeScreen extends State<HomeScreen> {
     if (_isAadhaarNumPresent) {
       userPassDetails = await dbServices.getPassDetails();
       if (kDebugMode) {
-        print("<><><><><><><><><><><><><><> User Pass Details: $userPassDetails <><><><><><><><><><><><><><>");
+        print(
+            "<><><><><><><><><><><><><><> User Pass Details: $userPassDetails <><><><><><><><><><><><><><>");
       }
     }
     setState(() {});

@@ -14,11 +14,13 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreen extends State<NotificationScreen> {
   NotificationServices notificationServices = NotificationServices();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  List<List<String>> notice = [];
 
   @override
   void initState() {
     super.initState();
-    notificationServices.requestNotificationPermission();
+    notificationServices.initLocalNotification();
+    // notificationServices.requestNotificationPermission();
     notificationServices.firebaseInit();
     notificationServices.isTokenRefreshed();
     notificationServices.getDeviceToken().then((value){
@@ -85,6 +87,11 @@ class _NotificationScreen extends State<NotificationScreen> {
       ),
     );
   }
+
+
+
+
+
   String _getFormattedTimestamp() {
     DateTime now = DateTime.now();
     return "${now.day}/${now.month}/${now.year} ${now.hour}:${now.minute}";

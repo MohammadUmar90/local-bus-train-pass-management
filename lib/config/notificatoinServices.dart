@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +10,7 @@ class NotificationServices {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
 
-  Future<void> initLocalNotification(BuildContext context,
-      RemoteMessage message) async {
+  Future<void> initLocalNotification() async {
     var androidInitialization =
     const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettings =
@@ -33,6 +33,10 @@ class NotificationServices {
   }
 
   Future<void> showNotifications(RemoteMessage message) async {
+
+    if (kDebugMode) {
+      print("---------------------------------> Coming to showNotification method <---------------------------------------------");
+    }
     AndroidNotificationChannel channel = AndroidNotificationChannel(
         Random.secure().nextInt(100000).toString(),
         "High Importance Notification",
@@ -48,11 +52,21 @@ class NotificationServices {
     NotificationDetails notificationDetails =
     NotificationDetails(android: androidNotificationDetails);
 
+    if (kDebugMode) {
+      print("---------------------------> title of message before sending to app: ${message.notification!.title.toString()} <------------------------------------");
+      print("----------------------------> $notificationDetails <----------------------------------------------------");
+    }
+
     Future.delayed(Duration.zero, () {
       _flutterLocalNotificationsPlugin.show(
           0, message.notification!.title.toString(),
           message.notification!.body.toString(), notificationDetails);
     });
+
+    if (kDebugMode) {
+      print("----------------------------> Message sent successfully !! <----------------------------------------------------");
+    }
+
   }
 
   void requestNotificationPermission() async {
