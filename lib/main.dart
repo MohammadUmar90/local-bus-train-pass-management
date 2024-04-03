@@ -6,7 +6,10 @@ import 'package:public_transit_pass_info/config/mongoDB.dart';
 import 'package:public_transit_pass_info/screens/NotificationScreen.dart';
 import 'package:public_transit_pass_info/screens/SignInAndSignUpScreen.dart';
 import 'package:public_transit_pass_info/screens/SplashScreen.dart';
+import 'package:public_transit_pass_info/screens/bus_ticket_and_pass.dart';
 import 'package:public_transit_pass_info/screens/referralCode.dart';
+import 'package:public_transit_pass_info/screens/scanning_screen.dart';
+import 'package:public_transit_pass_info/screens/train_ticket_and_pass.dart';
 import 'package:public_transit_pass_info/services/authServices.dart';
 import 'Provider/userProvider.dart';
 import 'screens/HomeScreen.dart';
@@ -55,7 +58,7 @@ class PassApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignInAndSignUpScreen(),
+      home: const SplashScreen(),
     );
   }
 }

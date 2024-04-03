@@ -2,21 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class TrainTicketing extends StatefulWidget {
+class BusTicketing extends StatefulWidget {
   final bool isTicket;
 
-  const TrainTicketing({super.key, required this.isTicket});
+  const BusTicketing({super.key, required this.isTicket});
 
   @override
-  State<TrainTicketing> createState() => _TrainTicketingState();
+  State<BusTicketing> createState() => _BusTicketingState();
 }
 
-class _TrainTicketingState extends State<TrainTicketing> {
+class _BusTicketingState extends State<BusTicketing> {
   TextEditingController stationFrom = TextEditingController();
   TextEditingController stationTo = TextEditingController();
   TextEditingController durationController = TextEditingController();
-  bool isSecondClass = true;
-  bool isSingle = true;
   late bool isTicket;
   bool payWithGoogleButton = false;
 
@@ -30,7 +28,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey.shade800,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Container(
@@ -39,8 +36,8 @@ class _TrainTicketingState extends State<TrainTicketing> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.deepPurpleAccent,
-                  Colors.blue,
+                  Colors.green,
+                  Colors.lightGreenAccent,
                 ],
               ),
             ),
@@ -78,8 +75,8 @@ class _TrainTicketingState extends State<TrainTicketing> {
                   ),
                   Text(
                     isTicket
-                        ? "Book Your Local Train Ticket"
-                        : "Book Your Local Train Pass",
+                        ? "Book Your Local Bus Ticket"
+                        : "Book Your Local Bus Pass",
                     style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
@@ -146,7 +143,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     controller: stationFrom,
                     cursorColor: Colors.white,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: Colors.green,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -166,164 +163,24 @@ class _TrainTicketingState extends State<TrainTicketing> {
                 height: 5,
               ),
               Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  // height: 50,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
-                      border: const Border.fromBorderSide(
-                        BorderSide(color: Colors.black12, width: 1),
-                      ),
-                      borderRadius: BorderRadius.circular(16)),
-                  child: TextField(
-                    controller: stationTo,
-                    cursorColor: Colors.white,
-                    style: const TextStyle(
-                      color: Colors.blue,
-                    ),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  )),
-              const SizedBox(
-                height: 10,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text(
-                  "Mode",
-                  style: TextStyle(color: Colors.grey, fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSingle = true;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSingle
-                                ? Colors.blue
-                                : Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Single",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
+                // height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.2),
+                    border: const Border.fromBorderSide(
+                      BorderSide(color: Colors.black12, width: 1),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSingle = false;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSingle
-                                ? Colors.grey.withOpacity(0.5)
-                                : Colors.blue,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                              child: Text(
-                            "Return",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text(
-                  "Class",
-                  style: TextStyle(color: Colors.grey, fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSecondClass = true;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSecondClass
-                                ? Colors.blue
-                                : Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Second",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSecondClass = false;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSecondClass
-                                ? Colors.grey.withOpacity(0.5)
-                                : Colors.blue,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "First",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    borderRadius: BorderRadius.circular(16)),
+                child: TextField(
+                  controller: stationTo,
+                  cursorColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.green,
+                  ),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -355,7 +212,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                   children: [
                     Text(
                       "10",
-                      style: TextStyle(fontSize: 24, color: Colors.blue),
+                      style: TextStyle(fontSize: 24, color: Colors.green),
                     ),
                     Text(
                       "Rs.",
@@ -392,7 +249,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     ),
                   ),
                 ),
-
               ),
               GestureDetector(
                 onTap: () {
@@ -409,13 +265,22 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: const Border.fromBorderSide(BorderSide(width: 1,color: Colors.grey),),
+                      border: const Border.fromBorderSide(
+                        BorderSide(width: 1, color: Colors.grey),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/googleLogo.png',width: 40,height: 40,fit: BoxFit.contain,),
-                        const SizedBox(width: 10,),
+                        Image.asset(
+                          'assets/images/googleLogo.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         const Text(
                           "Pay with Google",
                           style: TextStyle(
@@ -427,7 +292,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     ),
                   ),
                 ),
-
               ),
             ],
           ),
@@ -484,7 +348,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     controller: stationFrom,
                     cursorColor: Colors.white,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: Colors.green,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -517,7 +381,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     controller: stationTo,
                     cursorColor: Colors.white,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: Colors.green,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -529,78 +393,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
               const Padding(
                 padding: EdgeInsets.only(left: 8),
                 child: Text(
-                  "Class",
-                  style: TextStyle(color: Colors.grey, fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSecondClass = true;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSecondClass
-                                ? Colors.blue
-                                : Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Second",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSecondClass = false;
-                          });
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSecondClass
-                                ? Colors.grey.withOpacity(0.5)
-                                : Colors.blue,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "First",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-
-              const Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Text(
                   "Duration",
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
@@ -608,7 +400,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
               const SizedBox(
                 height: 5,
               ),
-
               Container(
                   width: MediaQuery.of(context).size.width * 0.6,
                   // height: 50,
@@ -623,7 +414,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     controller: durationController,
                     cursorColor: Colors.white,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: Colors.green,
                     ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -635,8 +426,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
               const SizedBox(
                 height: 10,
               ),
-
-
               const Padding(
                 padding: EdgeInsets.only(left: 8),
                 child: Text(
@@ -651,7 +440,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
                 width: MediaQuery.of(context).size.width * 0.6,
                 // height: 50,
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.2),
                     border: const Border.fromBorderSide(
@@ -700,7 +489,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     ),
                   ),
                 ),
-
               ),
               GestureDetector(
                 onTap: () {
@@ -717,13 +505,22 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      border: const Border.fromBorderSide(BorderSide(width: 1,color: Colors.grey),),
+                      border: const Border.fromBorderSide(
+                        BorderSide(width: 1, color: Colors.grey),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/googleLogo.png',width: 40,height: 40,fit: BoxFit.contain,),
-                        const SizedBox(width: 10,),
+                        Image.asset(
+                          'assets/images/googleLogo.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         const Text(
                           "Pay with Google",
                           style: TextStyle(
@@ -735,7 +532,6 @@ class _TrainTicketingState extends State<TrainTicketing> {
                     ),
                   ),
                 ),
-
               ),
             ],
           ),
@@ -769,7 +565,7 @@ class _TrainTicketingState extends State<TrainTicketing> {
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: isTicket ? Colors.blue : Colors.grey.withOpacity(0.5),
+                  color: isTicket ? Colors.green : Colors.grey.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: const Center(
@@ -791,14 +587,15 @@ class _TrainTicketingState extends State<TrainTicketing> {
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: isTicket ? Colors.grey.withOpacity(0.5) : Colors.blue,
+                  color: isTicket ? Colors.grey.withOpacity(0.5) : Colors.green,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: const Center(
-                    child: Text(
-                  "Pass",
-                  style: TextStyle(color: Colors.white),
-                )),
+                  child: Text(
+                    "Pass",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
             ),
           ),

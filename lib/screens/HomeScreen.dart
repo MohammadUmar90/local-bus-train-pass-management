@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+// import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:public_transit_pass_info/config/palette.dart';
-import 'package:public_transit_pass_info/screens/referralCode.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:public_transit_pass_info/screens/bus_ticket_and_pass.dart';
+import 'package:public_transit_pass_info/screens/train_ticket_and_pass.dart';
 
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../Provider/userProvider.dart';
 import '../config/constant.dart';
 import '../config/mongoDB.dart';
@@ -32,6 +34,7 @@ class _HomeScreen extends State<HomeScreen> {
   late List<Map<String, dynamic>> userData = [];
   TextEditingController searchText = TextEditingController();
   NotificationServices notificationServices = NotificationServices();
+  // MobileScannerController cameraController = MobileScannerController();
   final MongoDatabase dbServices = MongoDatabase();
   late String qrData = '';
   bool isTrainPassAvailable = false;
@@ -39,6 +42,9 @@ class _HomeScreen extends State<HomeScreen> {
   List<Map<String, dynamic>> userPassDetails = [];
   bool _isAadhaarNumPresent = false;
   bool showScanner = false;
+  bool isTicket = true;
+  late dynamic scanValue;
+  bool isScanCompleted = false;
 
   @override
   initState() {
@@ -601,11 +607,21 @@ class _HomeScreen extends State<HomeScreen> {
                                   : palette.busComponantColor),
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ReferralCodeScreen()));
+                              if (isTrain) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const TrainTicketing(
+                                                isTicket: true)));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BusTicketing(
+                                                isTicket: true)));
+                              }
                             },
                             child: Image.asset(
                               isTrain
@@ -629,10 +645,20 @@ class _HomeScreen extends State<HomeScreen> {
                                   : palette.busComponantColor),
                           child: InkWell(
                             onTap: () async {
-                              if (kDebugMode) {
-                                print("Tapped");
-                                print(
-                                    "The pass no. is: ${await dbServices.fetchUserPassNumber("958618358111")}");
+                              if (isTrain) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const TrainTicketing(
+                                                isTicket: false)));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BusTicketing(
+                                                isTicket: false)));
                               }
                             },
                             child: Image.asset(
@@ -655,14 +681,14 @@ class _HomeScreen extends State<HomeScreen> {
                               color: isTrain
                                   ? palette.trainComponantColor
                                   : palette.busComponantColor),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Image.asset(
-                              isTrain
-                                  ? 'assets/images/trainTicket.png'
-                                  : 'assets/images/busTicket.png',
-                            ),
-                          ),
+                          // child: InkWell(
+                          //   onTap: () {},
+                          //   child: Image.asset(
+                          //     isTrain
+                          //         ? 'assets/images/trainTicket.png'
+                          //         : 'assets/images/busTicket.png',
+                          //   ),
+                          // ),
                         ),
                         Container(
                           width: componentContainerSize,
@@ -673,14 +699,14 @@ class _HomeScreen extends State<HomeScreen> {
                               color: isTrain
                                   ? palette.trainComponantColor
                                   : palette.busComponantColor),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Image.asset(
-                              isTrain
-                                  ? 'assets/images/trainPass.png'
-                                  : 'assets/images/busPass.png',
-                            ),
-                          ),
+                          // child: InkWell(
+                          //   onTap: () {},
+                          //   child: Image.asset(
+                          //     isTrain
+                          //         ? 'assets/images/trainPass.png'
+                          //         : 'assets/images/busPass.png',
+                          //   ),
+                          // ),
                         ),
                       ],
                     ),
@@ -707,30 +733,52 @@ class _HomeScreen extends State<HomeScreen> {
                   ),
                   child: widget.asTC
                       ? showScanner
-                          ? Column(
+                          ? Stack(
                               children: [
+                                // MobileScanner(
+                                //   controller: cameraController,
+                                //   allowDuplicates: true,
+                                //   onDetect: (capture, args) {
+                                //     try{
+                                //       if (!isScanCompleted) {
+                                //         scanValue = capture.rawValue ?? '---';
+                                //         if (kDebugMode) {
+                                //           print(
+                                //               "-------------------------------> $scanValue");
+                                //         }
+                                //         isScanCompleted = true;
+                                //         if (isScanCompleted) {
+                                //           setState(() {
+                                //             showScanner = false;
+                                //           });
+                                //         }
+                                //       }
+                                //     }catch(ex){
+                                //       if (kDebugMode) {
+                                //         print("Error while Scanning -------------------> ${ex.toString()}");
+                                //       }
+                                //     }
+                                //   },
+                                // ),
+
+
+
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    const SizedBox.shrink(),
                                     IconButton(
                                       onPressed: () {
-                                        setState(() {
-                                          showScanner = false;
-                                        });
+                                        setState(
+                                          () {
+                                            showScanner = false;
+                                          },
+                                        );
                                       },
                                       icon: const Icon(
-                                        Icons.close,
+                                        Icons.cancel_outlined,
                                         color: Colors.black,
+                                        size: 30,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Stack(
-                                  children: [
-                                    MobileScanner(
-                                      onDetect: (barcodes) {},
                                     ),
                                   ],
                                 ),
@@ -742,6 +790,10 @@ class _HomeScreen extends State<HomeScreen> {
                                   setState(() {
                                     showScanner = true;
                                   });
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => const Scanner()));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

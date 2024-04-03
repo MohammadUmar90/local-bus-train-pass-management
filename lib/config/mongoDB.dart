@@ -2,10 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:provider/provider.dart';
 import 'package:public_transit_pass_info/config/constant.dart';
-
-import '../Provider/userProvider.dart';
 
 class MongoDatabase {
   Future<String> fetchUserPassNumber(String aadharNum) async {
@@ -270,7 +267,6 @@ class MongoDatabase {
     }
     return [];
   }
-
 }
 
 // to update call the function like this
