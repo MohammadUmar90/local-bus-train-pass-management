@@ -8,7 +8,7 @@ import 'package:public_transit_pass_info/screens/SignInAndSignUpScreen.dart';
 import 'package:public_transit_pass_info/screens/SplashScreen.dart';
 import 'package:public_transit_pass_info/screens/bus_ticket_and_pass.dart';
 import 'package:public_transit_pass_info/screens/referralCode.dart';
-import 'package:public_transit_pass_info/screens/scanning_screen.dart';
+
 import 'package:public_transit_pass_info/screens/train_ticket_and_pass.dart';
 import 'package:public_transit_pass_info/services/authServices.dart';
 import 'Provider/userProvider.dart';

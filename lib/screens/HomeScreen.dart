@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:public_transit_pass_info/config/palette.dart';
 import 'package:public_transit_pass_info/screens/bus_ticket_and_pass.dart';
+import 'package:public_transit_pass_info/screens/qrscanner.dart';
 import 'package:public_transit_pass_info/screens/train_ticket_and_pass.dart';
 
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
 import '../Provider/userProvider.dart';
 import '../config/constant.dart';
@@ -45,6 +47,7 @@ class _HomeScreen extends State<HomeScreen> {
   bool isTicket = true;
   late dynamic scanValue;
   bool isScanCompleted = false;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   @override
   initState() {
@@ -70,6 +73,9 @@ class _HomeScreen extends State<HomeScreen> {
       // notificationServices.requestNotificationPermission();
     });
   }
+
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -760,8 +766,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 //     }
                                 //   },
                                 // ),
-
-
+        
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -787,6 +792,10 @@ class _HomeScreen extends State<HomeScreen> {
                           : Center(
                               child: GestureDetector(
                                 onTap: () {
+                                  Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => QRScannerScreen()),
+);
                                   setState(() {
                                     showScanner = true;
                                   });
